@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:track_mate_app/core/constants/list_daerah.dart';
 import 'package:track_mate_app/core/constants/list_level.dart';
-import 'package:track_mate_app/features/add_trip/provider/add_trip_provider.dart';
+import 'package:track_mate_app/features/trip/provider/add_trip_provider.dart';
 
 class AddTrip extends StatefulWidget {
   const AddTrip({super.key});
@@ -50,27 +52,30 @@ class _AddTripState extends State<AddTrip> {
               child: Consumer<AddTripProvider>(
                 builder: (context, provider, _) {
                   return ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (provider.formKey.currentState!.validate()) {
-                        provider.refresh();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            content: ListTile(
-                              title: Text(
-                                'Sukses menambahkan trip.',
-                                style: TextStyle(color: Colors.white),
+                        await provider.addTrip(context);
+                        if (context.mounted) {
+                          provider.refresh();
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              content: ListTile(
+                                title: Text(
+                                  'Sukses menambahkan trip.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                leading: Icon(
+                                  Icons.done,
+                                  color: Colors.white,
+                                ),
                               ),
-                              leading: Icon(
-                                Icons.done,
-                                color: Colors.white,
-                              ),
+                              backgroundColor: Colors
+                                  .green, // Ubah warna latar belakang sesuai kebutuhan
                             ),
-                            backgroundColor: Colors
-                                .green, // Ubah warna latar belakang sesuai kebutuhan
-                          ),
-                        );
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -414,7 +419,7 @@ class _AddTripState extends State<AddTrip> {
                                 await ImagePicker().pickMultiImage();
 
                             if (imagesFromPhone.isNotEmpty) {
-                              // provider.addListImage(imagesFromPhone);
+                              provider.addListImage(imagesFromPhone);
                             }
                           },
                           child: Text(
@@ -439,7 +444,7 @@ class _AddTripState extends State<AddTrip> {
                                 final pickedFileCamera = await ImagePicker()
                                     .pickImage(source: ImageSource.camera);
                                 if (pickedFileCamera != null) {
-                                  // provider.addImage(pickedFileCamera);
+                                  provider.addImage(pickedFileCamera);
                                 }
                               },
                               child: const Icon(
@@ -453,63 +458,66 @@ class _AddTripState extends State<AddTrip> {
                     ),
                   ),
                   const SizedBox(
+                    height: 20,
+                  ),
+                  Consumer<AddTripProvider>(
+                    builder: (context, provider, _) {
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: provider.image.length,
+                        itemBuilder: (context, index) {
+                          final image = provider.image[index];
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  width: 100,
+                                  height: 100,
+                                  File(image.path),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 20,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    provider.removeImage(index);
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors
+                                          .black12, // Ganti dengan warna latar belakang yang diinginkan
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(2.0),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(
                     height: 80,
                   ),
-                  // Consumer<AddProgressProvider>(
-                  //   builder: (context, provider, _) {
-                  //     return GridView.builder(
-                  //       shrinkWrap: true,
-                  //       physics: const NeverScrollableScrollPhysics(),
-                  //       gridDelegate:
-                  //           const SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 3,
-                  //         crossAxisSpacing: 10,
-                  //         mainAxisSpacing: 10,
-                  //       ),
-                  //       itemCount: provider.image.length,
-                  //       itemBuilder: (context, index) {
-                  //         final image = provider.image[index];
-                  //         return Stack(
-                  //           children: [
-                  //             ClipRRect(
-                  //               borderRadius: BorderRadius.circular(10),
-                  //               child: Image.file(
-                  //                 width: 100,
-                  //                 height: 100,
-                  //                 File(image.path),
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             Positioned(
-                  //               top: 8,
-                  //               right: 20,
-                  //               child: GestureDetector(
-                  //                 onTap: () {
-                  //                   provider.removeImage(index);
-                  //                 },
-                  //                 child: Container(
-                  //                   decoration: const BoxDecoration(
-                  //                     color: Colors
-                  //                         .black12, // Ganti dengan warna latar belakang yang diinginkan
-                  //                     shape: BoxShape.circle,
-                  //                   ),
-                  //                   child: const Padding(
-                  //                     padding: EdgeInsets.all(2.0),
-                  //                     child: Icon(
-                  //                       Icons.close,
-                  //                       color: Colors.white,
-                  //                       size: 20,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         );
-                  //       },
-                  //     );
-                  //   },
-                  // ),
                 ],
               ),
             ),

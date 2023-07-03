@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:track_mate_app/features/detail_trip/view/detail_route.dart';
 
-class JourneyBar extends StatelessWidget {
+class JourneyBarHome extends StatelessWidget {
   final String title, desc;
 
-  const JourneyBar({
+  const JourneyBarHome({
     Key? key,
     required this.title,
     required this.desc,
@@ -34,12 +32,14 @@ class JourneyBar extends StatelessWidget {
         children: <Widget>[
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => const DetailTrip(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   CupertinoPageRoute(
+              //     builder: (context) => DetailTrip(
+              //       index: 0,
+              //     ),
+              //   ),
+              // );
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

@@ -28,6 +28,7 @@ class LocationPickerDialogState extends State<LocationPickerDialog> {
       pointIcon: const Icon(Icons.location_on, size: 23, color: Colors.red),
       intermediateIcon: const Icon(Icons.lens, size: 10, color: Colors.grey),
       callbackRefresh: () {
+        debugPrint(testPolyline.toString());
         debugPrint("polyedit setstate");
         setState(() {});
       },

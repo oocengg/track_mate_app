@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:track_mate_app/features/home/view/widgets/journey_bar_home.dart';
 import 'package:track_mate_app/features/home/view/widgets/motivation_section.dart';
-import 'package:track_mate_app/features/trip/view/widgets/journey_bar.dart';
 import 'package:track_mate_app/features/trip/view/widgets/page_header.dart';
 
 class Home extends StatefulWidget {
@@ -46,10 +46,11 @@ class _HomeState extends State<Home> {
                     ),
               ),
               const SizedBox(height: 10),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
+              const JourneyBarHome(
+                title: 'Dummy Latest',
+                desc:
+                    'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem',
+              ),
               Text(
                 'Trip Information',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:track_mate_app/features/home/view/home.dart';
-import 'package:track_mate_app/features/trip/view/trip.dart';
+import 'package:track_mate_app/features/home/view/pages/home.dart';
+import 'package:track_mate_app/features/trip/view/pages/trip.dart';
 import 'package:track_mate_app/features/profile/view/profile.dart';
 
 class DashboardProvider with ChangeNotifier {

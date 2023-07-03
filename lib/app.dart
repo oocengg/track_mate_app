@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:track_mate_app/features/add_trip/provider/add_trip_provider.dart';
+import 'package:track_mate_app/features/trip/provider/add_trip_provider.dart';
 import 'package:track_mate_app/features/dashboard/provider/dashboard_provider.dart';
-import 'package:track_mate_app/features/dashboard/view/dashboard.dart';
-import 'package:track_mate_app/features/detail_trip/provider/trip_provider.dart';
+import 'package:track_mate_app/features/dashboard/view/pages/dashboard.dart';
+import 'package:track_mate_app/features/trip/provider/detail_trip_provider.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -17,7 +17,7 @@ class App extends StatelessWidget {
           create: (context) => DashboardProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => TripProvider(),
+          create: (context) => DetailTripProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => AddTripProvider(),

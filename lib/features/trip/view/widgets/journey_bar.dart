@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:track_mate_app/features/detail_trip/view/detail_route.dart';
+import 'package:track_mate_app/features/trip/view/pages/detail_trip.dart';
 
 class JourneyBar extends StatelessWidget {
   final String title, desc;
+  final int index;
 
   const JourneyBar({
     Key? key,
     required this.title,
     required this.desc,
+    required this.index,
     // required this.id,
   }) : super(key: key);
 
@@ -38,7 +40,9 @@ class JourneyBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (context) => const DetailTrip(),
+                    builder: (context) => DetailTrip(
+                      index: index,
+                    ),
                   ),
                 );
               }

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:track_mate_app/features/add_trip/widgets/location_picker_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:track_mate_app/features/trip/model/trip_model.dart';
+import 'package:track_mate_app/features/trip/provider/detail_trip_provider.dart';
+import 'package:track_mate_app/features/trip/view/widgets/location_picker_dialog.dart';
 
 class AddTripProvider with ChangeNotifier {
   LatLng selectedLocation = const LatLng(0, 0);
 
   List<Polyline> polyLines = <Polyline>[];
+  List<XFile> image = [];
 
   String? selectedDaerah;
   String? selectedLevel;
@@ -47,6 +52,48 @@ class AddTripProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addTrip(BuildContext context) async {
+    TripModel newTrip = TripModel(
+      title: titleController.text,
+      panjangTrack: panjangTrackController.text,
+      ketinggianAwal: ketinggianAwalController.text,
+      ketinggianAkhir: ketinggianAkhirController.text,
+      daerah: daerahController.text,
+      level: levelController.text,
+      deskripsi: deskripsiController.text,
+      image: image,
+      polylines: polyLines,
+    );
+
+    // Map<String, dynamic> tripMap = {
+    //   'title': newTrip.title,
+    //   'panjangTrack': newTrip.panjangTrack,
+    //   'ketinggianAwal': newTrip.ketinggianAwal,
+    //   'ketinggianAkhir': newTrip.ketinggianAkhir,
+    //   'daerah': newTrip.daerah,
+    //   'level': newTrip.level,
+    //   'deskripsi': newTrip.deskripsi,
+    //   'imagePaths': newTrip.imagePaths,
+    //   'polylines': newTrip.polylines,
+    // };
+
+    // Provider.of<DetailTripProvider>(context, listen: false)
+    //     .tripData
+    //     .add(tripMap);
+
+    // Provider.of<DetailTripProvider>(context, listen: false)
+    //     .polyLines
+    //     .addAll(polyLines);
+
+    Provider.of<DetailTripProvider>(context, listen: false)
+        .dataList
+        .add(newTrip);
+
+    Provider.of<DetailTripProvider>(context, listen: false).refresh();
+
+    refresh();
+  }
+
   void refresh() {
     selectedDaerah = null;
     selectedLevel = null;
@@ -56,6 +103,7 @@ class AddTripProvider with ChangeNotifier {
     ketinggianAwalController.clear();
     ketinggianAkhirController.clear();
     deskripsiController.clear();
+    // image.clear();
     notifyListeners();
   }
 
@@ -78,6 +126,23 @@ class AddTripProvider with ChangeNotifier {
     }
 
     return null;
+  }
+
+  void addImage(XFile value) {
+    image.add(value);
+    notifyListeners();
+  }
+
+  void addListImage(List<XFile> value) {
+    image.addAll(value);
+    notifyListeners();
+  }
+
+  void removeImage(int index) {
+    if (index >= 0 && index < image.length) {
+      image.removeAt(index);
+      notifyListeners();
+    }
   }
 
   // Future<void> openEndLocationPickerDialog(BuildContext context) async {

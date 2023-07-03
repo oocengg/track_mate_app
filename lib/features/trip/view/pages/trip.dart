@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:track_mate_app/features/add_trip/view/add_trip.dart';
+import 'package:provider/provider.dart';
+import 'package:track_mate_app/features/trip/model/trip_model.dart';
+import 'package:track_mate_app/features/trip/provider/detail_trip_provider.dart';
+import 'package:track_mate_app/features/trip/view/pages/add_trip.dart';
 import 'package:track_mate_app/features/trip/view/widgets/journey_bar.dart';
 
 class Trip extends StatefulWidget {
@@ -112,27 +115,49 @@ class _TripState extends State<Trip> {
                       fontWeight: FontWeight.bold,
                     ),
               ),
+
               const SizedBox(height: 10),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
-              const JourneyBar(
-                  title: 'Gunung Merbabu',
-                  desc:
-                      'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
+              Consumer<DetailTripProvider>(
+                builder: (context, provider, _) {
+                  return Column(
+                    children: [
+                      provider.dataList.isNotEmpty
+                          ? ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: provider.dataList.length,
+                              shrinkWrap: true,
+                              reverse: true,
+                              itemBuilder: (context, index) {
+                                final TripModel data = provider.dataList[index];
+
+                                return JourneyBar(
+                                  title: data.title,
+                                  desc: data.deskripsi,
+                                  index: index,
+                                );
+                              },
+                            )
+                          : const Text('Sorry, Data is empty.')
+                    ],
+                  );
+                },
+              ),
+              // const JourneyBar(
+              //     title: 'Gunung Merbabu',
+              //     desc:
+              //         'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
+              // const JourneyBar(
+              //     title: 'Gunung Merbabu',
+              //     desc:
+              //         'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
+              // const JourneyBar(
+              //     title: 'Gunung Merbabu',
+              //     desc:
+              //         'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
+              // const JourneyBar(
+              //     title: 'Gunung Merbabu',
+              //     desc:
+              //         'LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem'),
               // Padding(
               //   padding: const EdgeInsets.all(12.0),
               //   child: SingleChildScrollView(
